@@ -8,7 +8,7 @@ from flaskr.service.user import get_user_scalar
 
 
 def validate_user_id(user_id):
-    if user_id is -1:
+    if user_id == -1:
         return
 
     user = get_user_scalar(user_id)
@@ -23,9 +23,9 @@ class ToastPostData:
 
 
 @dataclass
-class ToastMarkReadAllData:
+class ToastUserIdData:
     user_id: int = field(metadata={"validate": validate_user_id})
 
 
 toast_post_data_schema = class_schema(ToastPostData)()
-toast_mark_read_all_data_schema = class_schema(ToastMarkReadAllData)()
+toast_user_id_data_schema = class_schema(ToastUserIdData)()

@@ -12,6 +12,7 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev'
         , JSON_SORT_KEYS=False
+        , SQLALCHEMY_DATABASE_URI='sqlite:///app.db'
     )
 
     if test_config is None:

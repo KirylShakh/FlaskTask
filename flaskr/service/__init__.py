@@ -11,7 +11,6 @@ ma = Marshmallow()
 
 
 def init_db(app):
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
     db.init_app(app)
     migrate.init_app(app, db)
     ma.init_app(app)

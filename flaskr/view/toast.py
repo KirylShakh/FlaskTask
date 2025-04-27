@@ -1,4 +1,5 @@
 from flask import Blueprint
+from flask import request
 from flask_restx import Api
 from flask_restx import Resource
 from marshmallow import ValidationError
@@ -6,12 +7,13 @@ from marshmallow import ValidationError
 from flaskr.schema.toast import ToastSchema
 from flaskr.service.toast import get_toasts_scalars
 from flaskr.service.toast import get_toast_scalar
+from flaskr.service.toast import get_toasts_for_user
 from flaskr.service.toast import add_new_toast
 from flaskr.service.toast import delete_toast
 from flaskr.service.toast import mark_read
 from flaskr.service.toast import mark_read_all
 from flaskr.view.toast_data import toast_post_data_schema
-from flaskr.view.toast_data import toast_mark_read_all_data_schema
+from flaskr.view.toast_data import toast_user_id_data_schema
 
 
 bp = Blueprint('toast', __name__, url_prefix="/toast")
@@ -39,9 +41,14 @@ class ToastResource(Resource):
 class ToastsResource(Resource):
     def get(self):
         schema = ToastSchema(many=True)
-        scalars = get_toasts_scalars()
+        user_id = request.args.get('user_id', default = 0, type = int)
 
-        return schema.jsonify(scalars)
+        if user_id == 0:
+            scalars = get_toasts_scalars()
+            return schema.jsonify(scalars)
+
+        user_toasts = get_toasts_for_user(user_id)
+        return schema.jsonify(user_toasts)
 
 
 @api.route("/new")
@@ -75,8 +82,8 @@ class ToastMarkReadResource(Resource):
 class ToastsMarkReadResource(Resource):
     def put(self):
         try:
-            mark_read_all_data = toast_mark_read_all_data_schema.load(api.payload)
-            marked_count = mark_read_all(mark_read_all_data)
+            toast_user_id_data = toast_user_id_data_schema.load(api.payload)
+            marked_count = mark_read_all(toast_user_id_data)
         except ValidationError as err:
             return {"validation": err.messages}, 400
 
