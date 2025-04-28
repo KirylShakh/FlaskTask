@@ -1,5 +1,6 @@
 [project]
 name = "flaskr"
+dynamic = ["version", "description"]
 dependencies = [
     "flask"
     , "flask-sqlalchemy"

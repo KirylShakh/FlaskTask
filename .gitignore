@@ -3,7 +3,8 @@
 *.pyc
 __pycache__/
 
-instance/
+instance/*
+!instance/test_app.db
 
 .tox
 .pytest_cache/
